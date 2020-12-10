@@ -10,10 +10,97 @@ import re
 ### result. Name them according to the task ID as in the three
 ### examples below. Delete the three examples. The tasks you choose
 ### must be in the data/training directory, not data/evaluation.
-def solve_6a1e5592(x):
-    return x
 
-def solve_b2862040(x):
+
+def attaching(p,points):
+#     print(p,points,np.abs(np.array([abs(p[0]-pi[0]) + abs(p[1]-pi[1]) for pi in points])))
+    return np.any(np.array([abs(p[0]-pi[0]) + abs(p[1]-pi[1]) for pi in points])<=1)
+
+
+def make_raltive(anchor, fills):
+    ret = [(f[0]-anchor[0],f[1]-anchor[1]) for f in fills]
+    return ret
+
+def findClusterPair(cluster,clusters):
+    size = len(cluster)
+    relevants = [c for c in clusters if len(c)==size]
+    return relevants
+
+def wouldFit(c1,c2,xdist,ydist):
+    size = np.sqrt(len(c1))
+    print("trying",c1[-1][0]-c2[-1][0],c1[-1][1]-c2[-1][1],"s",xdist,ydist)
+    return c1[-1][0]-c2[-1][0] == size*xdist and c1[-1][1]-c2[-1][1]==size*ydist
+
+def fill_raltives_with_size(rels, anchor, size,y):
+    print(anchor,size)
+    for off in rels:
+#         print("off",off)
+        start = (anchor[0]+off[0]*size, anchor[1]+off[1]*size)
+#         print("ss",start)
+        for xi in range(size):
+            for yi in range(size):
+#                 print(start[0]-xi,start[1]-yi)
+                y[start[1]-yi] [start[0]-xi]= 1
+    return y
+
+# chosen 1
+def solve_447fd412(x):
+    calibs=[]
+    fills=[]
+    for xi in range(x.shape[1]):
+        for yi in range(x.shape[0]):
+            if x[yi,xi]==1:
+                fills.append((xi,yi))
+            if x[yi,xi]==2:
+                calibs.append((xi,yi))
+
+
+    pins = [p for p in calibs if attaching(p,fills)]
+
+    pins.sort()
+    relatives = make_raltive(pins[0], fills)
+
+    xdist = abs(pins[0][0]-pins[1][0])
+    ydist = abs(pins[0][1]-pins[1][1])
+
+    clusters = []
+    calibC = calibs.copy()
+    for p in pins:
+        calibC.remove(p)
+    while len(calibC)>0:
+        cluster = [calibC[0]]
+        calibC.remove(calibC[0])
+        changed = True
+        while changed:
+            changed = False
+            clusterN = [p for p in calibC if attaching(p,cluster)]
+            for p in clusterN:
+                calibC.remove(p)
+                cluster.append(p)
+                changed=True
+        cluster.sort()
+        clusters.append(cluster)
+
+    y = x.copy()
+    while len(clusters)>0:
+        current = clusters.pop()
+        brcorner = current[-1]
+        candidates = findClusterPair(current,clusters)
+        print(current[-1],candidates)
+        for can in candidates:
+            if wouldFit(current,can,xdist,ydist):
+                clusters.remove(can)
+                print(can)
+                if can[-1][0]<brcorner[0] or can[-1][1]<brcorner[1]:
+                    brcorner=can[-1]
+        # print("corner",brcorner)
+
+        y = fill_raltives_with_size(relatives,brcorner, \
+                                int(np.sqrt(len(current))) \
+                                ,y)
+    return y
+
+def solve_6d58a25d(x):
     return x
 
 def solve_05269061(x):
