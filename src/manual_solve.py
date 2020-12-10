@@ -28,19 +28,21 @@ def findClusterPair(cluster,clusters):
 
 def wouldFit(c1,c2,xdist,ydist):
     size = np.sqrt(len(c1))
-    print("trying",c1[-1][0]-c2[-1][0],c1[-1][1]-c2[-1][1],"s",xdist,ydist)
+    # print("trying",c1[-1][0]-c2[-1][0],c1[-1][1]-c2[-1][1],"s",xdist,ydist)
     return c1[-1][0]-c2[-1][0] == size*xdist and c1[-1][1]-c2[-1][1]==size*ydist
 
 def fill_raltives_with_size(rels, anchor, size,y):
     print(anchor,size)
     for off in rels:
-#         print("off",off)
+        # print("off",off)
         start = (anchor[0]+off[0]*size, anchor[1]+off[1]*size)
-#         print("ss",start)
+        # print("ss",start)
         for xi in range(size):
             for yi in range(size):
+#                 print("filling",)
 #                 print(start[0]-xi,start[1]-yi)
-                y[start[1]-yi] [start[0]-xi]= 1
+                if start[1]-yi>=0 and start[0]-xi>=0:
+                    y[start[1]-yi] [start[0]-xi]= 1
     return y
 
 # chosen 1
@@ -58,53 +60,81 @@ def solve_447fd412(x):
     pins = [p for p in calibs if attaching(p,fills)]
 
     pins.sort()
+
     relatives = make_raltive(pins[0], fills)
+    if len(pins)==2:
 
-    xdist = abs(pins[0][0]-pins[1][0])
-    ydist = abs(pins[0][1]-pins[1][1])
+        xdist = abs(pins[0][0]-pins[1][0])
+        ydist = abs(pins[0][1]-pins[1][1])
 
-    clusters = []
-    calibC = calibs.copy()
-    for p in pins:
-        calibC.remove(p)
-    while len(calibC)>0:
-        cluster = [calibC[0]]
-        calibC.remove(calibC[0])
-        changed = True
-        while changed:
-            changed = False
-            clusterN = [p for p in calibC if attaching(p,cluster)]
-            for p in clusterN:
-                calibC.remove(p)
-                cluster.append(p)
-                changed=True
-        cluster.sort()
-        clusters.append(cluster)
+        clusters = []
+        calibC = calibs.copy()
+        for p in pins:
+            calibC.remove(p)
+        while len(calibC)>0:
+            cluster = [calibC[0]]
+            calibC.remove(calibC[0])
+            changed = True
+            while changed:
+                changed = False
+                clusterN = [p for p in calibC if attaching(p,cluster)]
+                for p in clusterN:
+                    calibC.remove(p)
+                    cluster.append(p)
+                    changed=True
+            cluster.sort()
+            clusters.append(cluster)
 
-    y = x.copy()
-    while len(clusters)>0:
-        current = clusters.pop()
-        brcorner = current[-1]
-        candidates = findClusterPair(current,clusters)
-        print(current[-1],candidates)
-        for can in candidates:
-            if wouldFit(current,can,xdist,ydist):
-                clusters.remove(can)
-                print(can)
-                if can[-1][0]<brcorner[0] or can[-1][1]<brcorner[1]:
-                    brcorner=can[-1]
-        # print("corner",brcorner)
+        y = x.copy()
+        while len(clusters)>0:
+            current = clusters.pop()
+            brcorner = current[-1]
+            candidates = findClusterPair(current,clusters)
+            # print(current[-1],candidates)
+            for can in candidates:
+                if wouldFit(current,can,xdist,ydist):
+                    clusters.remove(can)
+                    # print(can)
+                    if can[-1][0]<brcorner[0] or can[-1][1]<brcorner[1]:
+                        brcorner=can[-1]
+            # print("corner",brcorner)
 
-        y = fill_raltives_with_size(relatives,brcorner, \
-                                int(np.sqrt(len(current))) \
-                                ,y)
+            y = fill_raltives_with_size(relatives,brcorner, \
+                                    int(np.sqrt(len(current))) \
+                                    ,y)
+    else: 
+        clusters = []
+        calibC = calibs.copy()
+        y = x.copy()
+        for p in pins:
+            calibC.remove(p)
+        while len(calibC)>0:
+            cluster = [calibC[0]]
+            calibC.remove(calibC[0])
+            changed = True
+            while changed:
+                changed = False
+                clusterN = [p for p in calibC if attaching(p,cluster)]
+                for p in clusterN:
+                    calibC.remove(p)
+                    cluster.append(p)
+                    changed=True
+            cluster.sort()
+            clusters.append(cluster)
+            
+        while len(clusters)>0:
+            current = clusters.pop()
+            brcorner = current[-1]
+            y = fill_raltives_with_size(relatives,brcorner, \
+                                    int(np.sqrt(len(current))) \
+                                    ,y)
     return y
 
-def solve_6d58a25d(x):
-    return x
+# def solve_6d58a25d(x):
+#     return x
 
-def solve_05269061(x):
-    return x
+# def solve_05269061(x):
+#     return x
 
 
 def main():
