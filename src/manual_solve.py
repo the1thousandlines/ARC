@@ -160,6 +160,58 @@ def solve_447fd412(x):
 # def solve_05269061(x):
 #     return x
 
+def solve_c3e719e8(case):
+    old = np.array(case)
+    c = Counter([x for y in case for x in y])
+    n = max(c, key=lambda x:c[x])
+    new = np.zeros((9,9))
+    for i,line in enumerate(case):
+        for j,num in enumerate(line):
+            if num == n:
+                new[3*i:(i+1)*3,3*j:3*(j+1)] = old
+            else:
+                continue
+    return new.astype(int).tolist()
+
+
+def solve_6d58a25d(inp):
+    inp = np.array(inp)
+    shape = np.array([[0,0,0,1,0,0,0],[0,0,1,1,1,0,0],[0,1,1,0,1,1,0],[1,0,0,0,0,0,1]])
+    tot = np.count_nonzero(shape)
+    y = shape.shape[0]
+    x = shape.shape[1]
+    for j in range(inp.shape[0]):
+        for i in range(inp.shape[1]):
+            try:
+                A = np.multiply(inp[j:j+y,i:i+x], shape)
+            except:
+                continue
+            if (np.count_nonzero(A) == tot):
+                col_idxs = list(range(i,i+x))
+                height = j+2
+                box = inp[j:j+y,i:i+x]
+                break
+        else:
+            continue
+        break
+            
+    colour = box.max()
+
+    colourings = []
+    for i,x in enumerate(inp[height:,col_idxs].T):
+        for y in x:
+            if y not in [0,colour]:
+                colourings.append((y,min(col_idxs)+i))
+                
+    for tup in colourings:
+        flag = 0
+        for i in range(inp[:,tup[1]].shape[0]):
+            if inp[i,tup[1]] == colour:
+                flag = 1
+            if flag and not (inp[i,tup[1]] == colour):
+                inp[i,tup[1]] = tup[0]
+    return inp
+
 
 def main():
     # Find all the functions defined in this file whose names are
