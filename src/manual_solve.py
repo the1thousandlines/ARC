@@ -47,6 +47,30 @@ def fill_raltives_with_size(rels, anchor, size,y):
 
 # chosen 1
 def solve_447fd412(x):
+    """
+    Problem:
+        problem 447fd412 is a problem, in which a small blueprint of a shape is given
+        with one or two 'anchor' points. The task is to replicate/project theses shapes onto 
+        the other anchors in X, taking into consideration that their size might have changed.
+        If a replica would hit a broder of the field, the rest is supposed to be cut off.
+
+    Algorithm:
+        The algorithm work as follows:
+            1. identify the already drawn shape (only ones in X)
+            2. identify attaching anchors (attaching 2's) they shall be the 'pins' to pin the shape on
+            3. if there are 2 anchors, identify the x and y distance
+                3.1 compute the relative position of all the fill points to the upper left anchor 
+            4. identify all possible other clusters that are anchors (clusters of 2's)
+            5. order them, from now on only the size and bottom right cornor will be considered
+            6. choose a new anchor, and determine size
+            7. if there were multiple pins, find other candidates (same sized anchors)
+            8. remove those that are in the right position to fit from the anchor list
+            9. choose the upper left most anchor
+            10. fill in the shape, using the size of the anchor and its bottom right cornor
+                10.1 ignore part that would be outside the field
+    Solved Grids:
+        All girds were solved correctly
+    """
     calibs=[]
     fills=[]
     for xi in range(x.shape[1]):
