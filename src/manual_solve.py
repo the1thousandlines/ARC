@@ -161,6 +161,21 @@ def solve_447fd412(x):
 #     return x
 
 def solve_c3e719e8(case):
+    """
+    Problem:
+        In problem 6d58a25d a 3x3 grid is given. The most common colour in the grid represents which section of a 9x9 grid the given
+        grid is placed (think of a sudoku grid and matchning the colour to a 3x3 box within the sudoku grid).
+
+    Algorithm:
+        The algorithm work as follows:
+            1. Identify the most common colour
+            2. Map the indexes of the colour to the 9x9 grid.
+            3. Place the 3x3 grid in the 9x9 grid based on these indexes
+            4. Return the solution
+            
+    Solved Grids:
+        All girds were solved correctly
+    """
     old = np.array(case)
     c = Counter([x for y in case for x in y])
     n = max(c, key=lambda x:c[x])
@@ -175,6 +190,23 @@ def solve_c3e719e8(case):
 
 
 def solve_6d58a25d(inp):
+    """
+    Problem:
+        In problem 6d58a25d a of a shape is given (with colour a). The task is to check 'under' the shape and
+        if a block of colour b (no reason b cant be a but in the examples and test such a situation does not arise)
+        is found then a 'line' is drawn from the bottom of the grid striaght up through the block and to the base of
+        the shape.
+
+    Algorithm:
+        The algorithm work as follows:
+            1. Using a moving window match the shape
+            2. Identify points beneath the shape, store their column and colour
+            3. Draw the 'line' through each point found.
+            4. Return the solution
+            
+    Solved Grids:
+        All girds were solved correctly
+    """
     inp = np.array(inp)
     shape = np.array([[0,0,0,1,0,0,0],[0,0,1,1,1,0,0],[0,1,1,0,1,1,0],[1,0,0,0,0,0,1]])
     tot = np.count_nonzero(shape)
