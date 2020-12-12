@@ -4,6 +4,7 @@ import os, sys
 import json
 import numpy as np
 import re
+from collections import Counter
 
 ### YOUR CODE HERE: write at least three functions which solve
 ### specific tasks by transforming the input x and returning the
@@ -52,6 +53,7 @@ def solve_447fd412(x):
         problem 447fd412 is a problem, in which a small blueprint of a shape is given
         with one or two 'anchor' points. The task is to replicate/project theses shapes onto 
         the other anchors in X, taking into consideration that their size might have changed.
+        In that case the replica is upposed to be scaled to the anchors size (e.g. if the anchor is 3x3, then each 1x1 field in the template becomes of size 3x3)
         If a replica would hit a broder of the field, the rest is supposed to be cut off.
 
     Algorithm:
@@ -192,9 +194,10 @@ def solve_c3e719e8(case):
 def solve_6d58a25d(inp):
     """
     Problem:
-        In problem 6d58a25d a of a shape is given (with colour a). The task is to check 'under' the shape and
-        if a block of colour b (no reason b cant be a but in the examples and test such a situation does not arise)
-        is found then a 'line' is drawn from the bottom of the grid striaght up through the block and to the base of
+        In problem 6d58a25d a grid of size NxM is given. It contains block of 2 colors. One color is used to draw 
+        a specified shape A (with colour c1). The task is to check 'under' the shape and
+        if a block of colour the other colour c2 (no reason c1 cant be c2 but in the examples and test such a situation does not arise)
+        is found then a 'line' is drawn from the bottom of the grid straight up through the block and to the base of
         the shape.
 
     Algorithm:

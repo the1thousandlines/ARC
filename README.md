@@ -14,6 +14,10 @@ As a reminder, a test-taker is said to solve a task when, upon seeing the task f
 This fork was made to implement the manual_solve.py by Òisin and Johannes for the Programming and Tools for AI course of the NUIG.
 The problems solved were:
  * 447fd412
+ * c3e719e8
+ * 6d58a25d
+
+ Documentation for the code and explenations can be found in the Docstrings of these methods in src/manual_solve.py
 
 
 
