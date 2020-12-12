@@ -165,8 +165,9 @@ def solve_447fd412(x):
 def solve_c3e719e8(case):
     """
     Problem:
-        In problem 6d58a25d a 3x3 grid is given. The most common colour in the grid represents which section of a 9x9 grid the given
-        grid is placed (think of a sudoku grid and matchning the colour to a 3x3 box within the sudoku grid).
+        In problem 6d58a25d a 3x3 grid is given. The most common colour in the grid represents which (3x3) sections of a 9x9 grid the given
+        grid is placed (think of a sudoku grid and matching the colour to a 3x3 box within the sudoku grid). So every pixel with the most common color leads to 
+        a copy of that grid in the bigger 9x9 output field at its relative position.
 
     Algorithm:
         The algorithm work as follows:
