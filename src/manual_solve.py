@@ -290,6 +290,90 @@ def solve_6d58a25d(inp):
                 inp[i,tup[1]] = tup[0]
     return inp
 
+#### BELOW FUNCTIONS ARE USED IN PROBLEM 9ecd008a ########
+
+def create_from_bottom_left(X):
+    top_left = np.flip(X, axis = 0)
+    top_right = np.flip(X)
+    sol = np.append(top_left, top_right, axis = 1)
+    bottom_right = np.flip(X, axis = 1).T
+    sol_bottom = np.append(X, bottom_right, axis = 1)
+    sol = np.append(sol, sol_bottom, axis = 0)
+    return sol
+
+def create_from_bottom_right(X):
+    bottom_left = np.flip(X)
+    top_left = np.flip(bottom_left, axis = 0)
+    top_right = np.flip(top_left, axis = 1)
+    sol_upper = np.append(top_left, top_right, axis = 1)
+    sol_lower = np.append(bottom_left, X, axis = 1)
+    sol = np.append(sol_upper, sol_lower, axis = 0)
+    return sol
+
+def create_from_top_left(X):
+    bottom_left = np.flip(X, axis = 0)
+    bottom_right = np.flip(bottom_left, axis = 1)
+    top_right = np.flip(bottom_right, axis = 0)
+    sol_upper = np.append(X, top_right, axis = 1)
+    sol_lower = np.append(bottom_left, bottom_right, axis = 1)
+    sol = np.append(sol_upper, sol_lower, axis = 0)
+    return sol
+
+def create_from_top_right(X):
+    top_left = np.flip(X, axis = 1)
+    bottom_left = np.flip(top_left, axis = 0)
+    bottom_right = np.flip(bottom_left, axis = 1)
+    sol_upper = np.append(top_left, X, axis = 1)
+    sol_lower = np.append(bottom_left, bottom_right, axis = 1)
+    sol = np.append(sol_upper, sol_lower, axis = 0)
+    return sol
+
+def solve_9ecd008a(x):
+    '''
+    Problem:
+        In problem 9ecd008a we are given a square grid that is symmetrical along it's horizontal and vertical axis.
+        Out of this grid a 3x3 block is blacked out. The task is to find the contents of the 3x3 block.
+        
+    Algorithm:
+        The algorithm works as follows:
+        1. Find the 3x3 block and it's coordinated
+        2. Check which of the 4 quadrants are unaffected by the removed block
+        3. Using one of the unaffected quadrants, recreate the original grid
+        4. Return the missing 3x3 block by checking the recreated grid
+        
+    Solved Grids:
+        All grids were solved successfully
+        
+    Reflection:
+        This algorithm works by using the numpy function 'np.flip' which flips a matrix along a given axis.
+        It uses numpy indexing to pass a moving 'window' over the grid until the 3x3 block is found.
+    '''
+    for j in range(x.shape[0]):
+        for i in range(x.shape[1]):
+            try:
+                A = np.multiply(x[j:j+3,i:i+3], np.ones((3,3)))
+            except:
+                continue
+            if sum(A.flatten()) == 0:
+                indexes = (j,i)
+                break
+        else:
+            continue
+        break
+    top_left = x[: x.shape[0]//2 , :x.shape[0]//2 ]
+    top_right = x[: x.shape[0]//2 , x.shape[0]//2 :]
+    bottom_right = X[ X.shape[0]//2 : , X.shape[0]//2 : ]
+    bottom_left = x[ x.shape[0]//2 : , : x.shape[0]//2 ]
+    if 0 not in top_left.flatten():
+        sol = create_from_top_left(top_left)
+    elif 0 not in top_right.flatten():
+        sol = create_from_top_right(top_right)
+    elif 0 not in bottom_left.flatten():
+        sol = create_from_bottom_left(bottom_left)
+    elif 0 not in bottom_right.flatten():
+        sol = create_from_bottom_right(bottom_right)
+    return sol[j:j+3, i:i+3]
+
 
 def main():
     # Find all the functions defined in this file whose names are
