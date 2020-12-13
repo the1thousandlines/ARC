@@ -362,7 +362,7 @@ def solve_9ecd008a(x):
         break
     top_left = x[: x.shape[0]//2 , :x.shape[0]//2 ]
     top_right = x[: x.shape[0]//2 , x.shape[0]//2 :]
-    bottom_right = X[ X.shape[0]//2 : , X.shape[0]//2 : ]
+    bottom_right = x[ x.shape[0]//2 : , x.shape[0]//2 : ]
     bottom_left = x[ x.shape[0]//2 : , : x.shape[0]//2 ]
     if 0 not in top_left.flatten():
         sol = create_from_top_left(top_left)
