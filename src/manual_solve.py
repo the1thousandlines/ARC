@@ -13,6 +13,12 @@ from collections import Counter
 ### must be in the data/training directory, not data/evaluation.
 
 
+##Authours: 
+## Johannes-Lucas Loewe
+## Oisín Doyle, 20235664
+
+## github: https://github.com/the1thousandlines/ARC
+
 def attaching(p,points):
     """
     check if point p is attahced to any point in points
@@ -88,6 +94,12 @@ def solve_447fd412(x):
                 10.1 ignore part that would be outside the field
     Solved Grids:
         All girds were solved correctly
+
+    Relevance: 
+        this problem mostly touches upon abstraction of a task and its generalization
+        having seen a problem with one node solved, one should be able to solve it with X nodes as long as they are not ambigious,
+        without having seen any training data towards that. The solution goes into that direction and couls with change in distance 
+        measures be able to solve a N nodes problem
     """
     calibs=[]
     fills=[]
@@ -100,28 +112,31 @@ def solve_447fd412(x):
 
 
     pins = [p for p in calibs if attaching(p,fills)]
-
+    # we always sort so the last one is the bottom right most, and first top left most
     pins.sort()
 
     relatives = make_raltive(pins[0], fills)
+
     if len(pins)==2:
 
         xdist = abs(pins[0][0]-pins[1][0])
         ydist = abs(pins[0][1]-pins[1][1])
 
         clusters = []
-        calib_clusters = calibs.copy()
+        calib_points = calibs.copy()
+        #remove pin cluters
         for p in pins:
-            calib_clusters.remove(p)
-        while len(calib_clusters)>0:
-            cluster = [calib_clusters[0]]
-            calib_clusters.remove(calib_clusters[0])
+            calib_points.remove(p)
+        # 'connect' clusters as until none left
+        while len(calib_points)>0:
+            cluster = [calib_points[0]]
+            calib_points.remove(calib_points[0])
             changed = True
             while changed:
                 changed = False
-                cluster_neighbour = [p for p in calib_clusters if attaching(p,cluster)]
+                cluster_neighbour = [p for p in calib_points if attaching(p,cluster)]
                 for p in cluster_neighbour:
-                    calib_clusters.remove(p)
+                    calib_points.remove(p)
                     cluster.append(p)
                     changed=True
             cluster.sort()
@@ -146,19 +161,19 @@ def solve_447fd412(x):
                                     ,y)
     else: 
         clusters = []
-        calib_clusters = calibs.copy()
+        calib_points = calibs.copy()
         y = x.copy()
         for p in pins:
-            calib_clusters.remove(p)
-        while len(calib_clusters)>0:
-            cluster = [calib_clusters[0]]
-            calib_clusters.remove(calib_clusters[0])
+            calib_points.remove(p)
+        while len(calib_points)>0:
+            cluster = [calib_points[0]]
+            calib_points.remove(calib_points[0])
             changed = True
             while changed:
                 changed = False
-                cluster_neighbour = [p for p in calib_clusters if attaching(p,cluster)]
+                cluster_neighbour = [p for p in calib_points if attaching(p,cluster)]
                 for p in cluster_neighbour:
-                    calib_clusters.remove(p)
+                    calib_points.remove(p)
                     cluster.append(p)
                     changed=True
             cluster.sort()
@@ -338,3 +353,8 @@ def show_result(x, y, yhat):
 
 if __name__ == "__main__": main()
 
+### Libraries used
+##In order to solve the problems, mostly python internal libraries were used
+##althoug some problem could be done more effeiciently by further numpy usage,
+##most array operations are in numpy or list comrpehensions.
+##The Counter from the collection module is used to efficiently create histographical representations.
