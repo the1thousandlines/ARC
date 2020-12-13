@@ -14,7 +14,7 @@ from collections import Counter
 
 
 ##Authours: 
-## Johannes-Lucas Loewe
+## Johannes-Lucas Loewe, 20235336
 ## Oisín Doyle, 20235664
 
 ## github: https://github.com/the1thousandlines/ARC
@@ -100,6 +100,10 @@ def solve_447fd412(x):
         having seen a problem with one node solved, one should be able to solve it with X nodes as long as they are not ambigious,
         without having seen any training data towards that. The solution goes into that direction and couls with change in distance 
         measures be able to solve a N nodes problem
+
+    Reflection:
+        This funtion uses python native utilities and loops, as well as numpy for basic array manipulation. This incluse array to scalar comparison (==) and array boolean checkigns
+        np.any to identify if any item is true
     """
     calibs=[]
     fills=[]
