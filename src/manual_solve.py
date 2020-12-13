@@ -209,6 +209,9 @@ def solve_c3e719e8(case):
             
     Solved Grids:
         All girds were solved correctly
+
+    Reflection: solve_c3e719e8 uses a Counter on the flattened array to find the most common colour by application of the max function on the Counter, acting on the values,
+    which returns the key (read colour) with the maximum value. It uses a linear map from {0,1,2} to {0,1,...,8} to fill the larger 9x9 grid
     """
     old = np.array(case)
     c = Counter([x for y in case for x in y])
@@ -241,6 +244,10 @@ def solve_6d58a25d(inp):
             
     Solved Grids:
         All girds were solved correctly
+
+    Reflection: This function uses basic numpy operations such as count_nonzero and multiply (which is element-wise multiplication, not matrix multiplication).
+    np.multiply is used to make sure colours around the shape but within the shapes moving window are ignored in the count_nonzero. The rest of the algorithm uses
+    standard python control flow methods and numpy indexing.
     """
     inp = np.array(inp)
     shape = np.array([[0,0,0,1,0,0,0],[0,0,1,1,1,0,0],[0,1,1,0,1,1,0],[1,0,0,0,0,0,1]])
@@ -355,6 +362,6 @@ if __name__ == "__main__": main()
 
 ### Libraries used
 ##In order to solve the problems, mostly python internal libraries were used
-##althoug some problem could be done more effeiciently by further numpy usage,
+##although some problem could be done more effeiciently by further numpy usage,
 ##most array operations are in numpy or list comrpehensions.
 ##The Counter from the collection module is used to efficiently create histographical representations.
